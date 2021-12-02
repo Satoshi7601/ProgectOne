@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tcc</title>
+
+    <style>
+        table,
+th,
+td {
+    border: 1px solid black;
+}
+
+button {
+    box-shadow: inset 0px 1px 0px 0px #7a8eb9;
+    background: linear-gradient(to bottom, #3c69c9 5%, #5972a7 100%);
+    background-color: #3c69c9;
+    border: 1px solid #294bba;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 12px;
+    text-decoration: none;
+}
+
+button:hover {
+    background: linear-gradient(to bottom, #5972a7 5%, #3c69c9 100%);
+    background-color: #5972a7;
+}
+
+button:active {
+    position: relative;
+    top: 1px;
+}
+
+input {
+    padding: 5px;
+    font-size: 16px;
+    border-width: 3px;
+    border-color: #CCCCCC;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 3px;
+    box-shadow: 0px 0px 5px rgba(66, 66, 66, .75);
+    text-shadow: 0px 0px 5px rgba(66, 66, 66, .75);
+}
+
+input:focus {
+    outline: none;
+}
+
+#demo {
+    display: block;
+}
+    </style>
+
+</head>
+<body>
+    Nome: <input type="text" id="nome" value=""></input><br> Tel: <input type="text" value="" id="tel"></input><br> e-mail: <input type="text" value="" id="email"></input><br>
+    <button onclick="Cadastrar();">Cadastrar</button>
+    <button onclick="ListarContatos();">Listar Contatos</button>
+
+
+
+    <br><br><br><br><br>
+
+    <input type="text" id="nomeBusca" value=""><br>
+    <button onclick="BuscarContato();">Buscar Contatos</button>
+
+    <br><br><br><br><br>
+
+    <input type="text" id="removerId" value=""><br>
+    <button onclick="RemoverContato();">Remover Contato</button>
+
+    <div id="contatos">
+
+    </div>
+
+    <script>
+        let contatos = [];
+let id = 0;
+
+function Cadastrar() {
+    let nome = document.getElementById("nome").value;
+    let tel = document.getElementById("tel").value;
+    let email = document.getElementById("email").value;
+
+    let contato = {
+        "id": id++,
+        "nome": nome,
+        "tel": tel,
+        "email": email
+    }
+
+    contatos.push(contato);// joga as variaveis para os contatos
+}
+
+function ListarContatos() {
+    let conteudo = '';
+
+    for (let i = 0; i < contatos.length; i++)
+        conteudo += GetContatoFormatado(contatos[i]);
+
+    GerarTabela(conteudo);
+}
+
+function GerarTabela(conteudo) {
+    let div = document.getElementById("contatos");
+    let output = '<table>\
+    <tr>\
+        <th>ID</th>\
+        <th>Nome</th>\
+        <th>Tel</th>\
+        <th>E-mail</th>\
+    </tr>';
+    output += conteudo;
+    output += '</table>';
+    div.innerHTML = output;
+}
+
+function GetContatoFormatado(contato) {
+    let output = '';
+    output += '<tr>';
+    output += "<td>" + contato.id + "</td>";
+    output += "<td>" + contato.nome + "</td>";
+    output += "<td>" + contato.tel + "</td>";
+    output += "<td>" + contato.email + "</td>";
+    output += '</tr>';
+    return output;
+}
+
+function BuscarContato() {
+    let inputNome = document.getElementById("nomeBusca").value.toLowerCase();
+    let conteudo = '';
+
+    for (let i = 0; i < contatos.length; i++) {
+        let contato = contatos[i];
+        let nome = contato.nome.toLowerCase();
+
+        if (nome.includes(inputNome))
+            conteudo += GetContatoFormatado(contato);
+    }
+
+    GerarTabela(conteudo);
+}
+
+function RemoverContato() {
+    let id = parseInt(document.getElementById("removerId").value);
+    for (let i = 0; i < contatos.length; i++) {
+        if (contatos[i].id == id) {
+            contatos[i] = contatos[contatos.length - 1];
+            contatos.length--;
+            break;
+        }
+    }
+}
+
+    </script>
+</body>
+</html>
